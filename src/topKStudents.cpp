@@ -15,12 +15,48 @@ NOTES:
 
 #include <iostream>
 #include <malloc.h>
+#include <string.h>
 
-struct student {
+struct student
+{
 	char *name;
 	int score;
 };
 
-struct student ** topKStudents(struct student *students, int len, int K) {
-	return NULL;
+struct student ** topKStudents(struct student *students, int len, int K)
+{
+	if (K <= 0)
+		return NULL;
+	else
+	{
+		int index, index1;
+		struct student **result = (struct student**)malloc(len*sizeof(struct student));
+
+		for (index = 0; index < len; index++)
+			for (index1 = index; index1 < len; index1++)
+				if (students[index].score < students[index1].score)
+				{
+					struct student temp = students[index];
+					students[index] = students[index1];
+					students[index1] = temp;
+				}
+
+		if (K == 1)
+		{
+			result[0] = &students[0];
+			return result;
+		}
+		if (K > len)
+		{
+			for (index = 0; index < len; index++)
+				result[index] = &students[index];
+			return result;
+		}
+		else
+		{
+			for (index = 0; index < K; index++)
+				result[index] = &students[index];
+			return result;
+		}
+	}
 }
